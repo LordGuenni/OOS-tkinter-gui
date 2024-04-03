@@ -18,3 +18,6 @@ ENV/
 
 # ZIPs
 *.zip
+
+# DB
+*.db

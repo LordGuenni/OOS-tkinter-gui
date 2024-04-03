@@ -80,19 +80,15 @@ def main():
     output_text.pack_forget()
     
     def display_recordings():
-        recordings = list_recordings()
-        if recordings:
+        list_of_recordings = list_recordings()
+        if list_of_recordings:
             output_text.pack(fill='x')  
             output_text.delete(1.0, tk.END)  
-            max_length = 0
-            for recording in recordings:
-                text = f"Url: {recording['url']} , File: {recording['filename']}, Duration: {recording['duration']} seconds, Created: {recording['creation_time']}\n"
-                output_text.insert(tk.END, text)
-                max_length = max(max_length, len(text))
+            output_text.insert(tk.END, list_of_recordings)
             output_text.config(state='disabled')  
             root.update_idletasks()  
-            width = max(root.winfo_width(), max_length * 8) + 50  
-            root.geometry(f"{width}x{root.winfo_height() + output_text.winfo_height()}") 
+            width = output_text.winfo_width() + 20  
+            root.geometry(f"{width}x{root.winfo_height()}")  
         else:
             output_text.pack_forget()
 
@@ -105,12 +101,10 @@ def main():
             progress_bars[progress_index]['value'] = progress_bars[progress_index]['maximum']
         
     def update_progress_bar(duration, progress_bars, root):
-        progress = ttk.Progressbar(root, length=200, mode='determinate')
+        progress = ttk.Progressbar(root, length=200, mode='determinate', maximum=duration, value=0)
         progress.pack(fill='x')
         progress_bars.append(progress)
-        progress['maximum'] = duration
-        progress['value'] = 0
-        countdown(duration, len(progress_bars) - 1)  
+        countdown(duration, len(progress_bars) - 1)
 
     root.mainloop()
 

@@ -6,6 +6,7 @@ from threading import Thread
 from urllib.parse import urlparse
 import urllib.request
 import time
+from tabulate import tabulate
 
 
 class DatabaseConnection:
@@ -34,19 +35,11 @@ def list_recordings():
     with DatabaseConnection() as c:
         print("List of recordings:")
         c.execute("SELECT * FROM recordings")
-        recordings = []
-        for row in c.fetchall():
-            url, filename, duration, creation_time = row
-            print(
-                f"Url: {url} , File: {filename}, Duration: {duration} seconds, Created: {creation_time}"
-            )
-            recordings.append({
-                'url': url,
-                'filename': filename,
-                'duration': duration,
-                'creation_time': creation_time
-            })
-        return recordings
+        rows = c.fetchall()
+        list_of_recordings = tabulate(rows, headers=('URL', 'Filename', 'Duration', 'Created'), tablefmt="heavy_outline")
+        print(list_of_recordings)
+        return list_of_recordings
+    
 
 
 def record(url, filename, duration, blocksize):
@@ -65,9 +58,9 @@ def record(url, filename, duration, blocksize):
             c.execute("DELETE FROM recordings WHERE filename=?", (filename + ".mp3",))
             creation_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             c.execute(
-                    "INSERT INTO recordings (url, filename, duration, creation_time) VALUES (?, ?, ?, ?)",
-                    (url, filename + ".mp3", duration, creation_time),
-                )   
+                "INSERT INTO recordings (url, filename, duration, creation_time) VALUES (?, ?, ?, ?)",
+                (url[:30], filename + ".mp3", duration, creation_time),
+            )  
         print(f"Recording finished. Duration: {end_time - start_time} seconds")
         
     except Exception as e:
