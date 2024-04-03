@@ -25,11 +25,11 @@ class AudioDownloaderApp:
         self.root.title("Florian Stamer Audio Downloader")
 
         self.url_entry = self.create_input_field("URL:")
-        self.filename_entry = self.create_input_field("Dateiname:")
+        self.filename_entry = self.create_input_field("Filename:")
 
-        self.duration_slider = self.create_slider("Dauer:", DURATION_MIN, DURATION_MAX)
+        self.duration_slider = self.create_slider("Duration:", DURATION_MIN, DURATION_MAX)
         
-        self.blocksize_slider = self.create_slider("Blockgröße:", BLOCK_SIZE_MIN, BLOCK_SIZE_MAX)
+        self.blocksize_slider = self.create_slider("Blocksize:", BLOCK_SIZE_MIN, BLOCK_SIZE_MAX)
         self.blocksize_slider.config(command=lambda value: self.on_slider_move(value))  # Passing value to on_slider_move
         
         self.create_button("List", self.display_recordings)
