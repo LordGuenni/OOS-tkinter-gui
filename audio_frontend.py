@@ -1,7 +1,8 @@
-"""Dieses Modul stellt das FrontEnd für den gui_audiorecorder da."""
+"""Dieses Modul stellt das frontEnd für den gui_audiorecorder da."""
 
 import tkinter as tk
 from tkinter import ttk, messagebox
+
 from audio_backend import list_recordings, start_download
 
 DURATION_MIN = 30
@@ -33,7 +34,7 @@ class AudioDownloaderApp:
         self.create_button("List", self.display_recordings)
         self.create_button("Start", self.button_start)
 
-        self.output_text = tk.Text(self.root, wrap=tk.NONE)
+        self.output_text = tk.Text(self.root, wrap='word')
         self.output_text.pack(fill='x')
         self.output_text.pack_forget()
         
@@ -80,7 +81,7 @@ class AudioDownloaderApp:
             self.output_text.insert(tk.END, list_of_recordings)
             self.output_text.config(state='disabled')  
             self.root.update_idletasks()
-            width = self.output_text.winfo_width() + 20  
+            width = self.output_text.winfo_width() + 25  
             self.root.geometry(f"{width}x{self.root.winfo_height()}")  
             self.root.update_idletasks()
         else:

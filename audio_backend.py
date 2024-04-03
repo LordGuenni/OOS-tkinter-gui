@@ -1,3 +1,5 @@
+"""Dieses Modul stellt das backEnd für den gui_audiorecorder da."""
+
 import datetime
 import sqlite3
 import threading
