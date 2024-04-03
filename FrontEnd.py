@@ -16,11 +16,9 @@ class AudioDownloaderApp:
         self.setup_ui()
 
     def on_slider_move(self, value):
-        # Round the value to the nearest valid block size
         value = min(BLOCK_SIZES, key=lambda x: abs(x - int(value)))
         self.blocksize_slider.set(value)  # Assuming self.blocksize_slider is the correct reference
 
-            
     def setup_ui(self):
         self.root.title("Florian Stamer Audio Downloader")
 
@@ -38,6 +36,9 @@ class AudioDownloaderApp:
         self.output_text = tk.Text(self.root, wrap=tk.NONE)
         self.output_text.pack(fill='x')
         self.output_text.pack_forget()
+        
+        self.progress_frame = tk.Frame(self.root)
+        self.progress_frame.pack(side="bottom", fill="x")
 
     def create_input_field(self, label_text):
         label = tk.Label(self.root, text=label_text)
@@ -78,20 +79,23 @@ class AudioDownloaderApp:
             self.output_text.delete(1.0, tk.END)  
             self.output_text.insert(tk.END, list_of_recordings)
             self.output_text.config(state='disabled')  
-            self.root.update_idletasks()  
+            self.root.update_idletasks()
             width = self.output_text.winfo_width() + 20  
             self.root.geometry(f"{width}x{self.root.winfo_height()}")  
+            self.root.update_idletasks()
         else:
             self.output_text.pack_forget()
 
     def update_progress_bar(self, duration):
-        progress = ttk.Progressbar(self.root, length=200, mode='determinate', maximum=duration, value=0)
+        progress = ttk.Progressbar(self.progress_frame, length=200, mode='determinate', maximum=duration, value=0)
         progress.pack(fill='x')
         self.root.after(1000, self.countdown, duration, progress)
+        self.root.update_idletasks()
 
     def countdown(self, time_left, progress):
         if time_left > 0:
             progress['value'] = progress['maximum'] - time_left
+            progress.pack(fill='x')
             self.root.after(1000, self.countdown, time_left - 1, progress)
         else:
             messagebox.showinfo("Erfolg", "Download Abgeschlossen!")
