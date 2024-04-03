@@ -18,7 +18,7 @@ class AudioDownloaderApp:
 
     def on_slider_move(self, value):
         value = min(BLOCK_SIZES, key=lambda x: abs(x - int(value)))
-        self.blocksize_slider.set(value)  # Assuming self.blocksize_slider is the correct reference
+        self.blocksize_slider.set(value)  #
 
     def setup_ui(self):
         self.root.title("Florian Stamer Audio Downloader")
@@ -29,7 +29,7 @@ class AudioDownloaderApp:
         self.duration_slider = self.create_slider("Duration:", DURATION_MIN, DURATION_MAX)
         
         self.blocksize_slider = self.create_slider("Blocksize:", BLOCK_SIZE_MIN, BLOCK_SIZE_MAX)
-        self.blocksize_slider.config(command=lambda value: self.on_slider_move(value))  # Passing value to on_slider_move
+        self.blocksize_slider.config(command=lambda value: self.on_slider_move(value))  
         
         self.create_button("List", self.display_recordings)
         self.create_button("Start", self.button_start)

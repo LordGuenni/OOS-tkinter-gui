@@ -69,7 +69,6 @@ def add_recording_to_database(url, filename, duration):
         c.execute("SELECT COUNT(*) FROM recordings WHERE filename = ?", (filename,))
         count = c.fetchone()[0]
         if count > 0:
-            # If a recording with the same filename already exists, delete it
             c.execute("DELETE FROM recordings WHERE filename = ?", (filename,))
         c.execute("INSERT INTO recordings (url, filename, duration, creation_time) VALUES (?, ?, ?, ?)", 
                   (url[:30], filename, duration, creation_time))
