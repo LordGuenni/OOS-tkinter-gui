@@ -1,0 +1,20 @@
+# Python Umgebungen
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# VSCode
+.vscode/
+
+# ZIPs
+*.zip
