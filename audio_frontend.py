@@ -1,8 +1,8 @@
-"""Dieses Modul stellt das frontEnd für den gui_audiorecorder da."""
+"""Dieses Modul stellt das frontend für den gui_audiorecorder da."""
 
 import tkinter as tk
 from tkinter import ttk, messagebox
-
+import click
 from audio_backend import list_recordings, start_download
 
 DURATION_MIN = 30
@@ -74,18 +74,15 @@ class AudioDownloaderApp:
             messagebox.showerror("Fehler", str(e))
         
     def display_recordings(self):
+        self.output_text.delete(1.0, tk.END)
         list_of_recordings = list_recordings()
+        
         if list_of_recordings:
-            self.output_text.pack(fill='x')  
-            self.output_text.delete(1.0, tk.END)  
             self.output_text.insert(tk.END, list_of_recordings)
-            self.output_text.config(state='disabled')  
-            self.root.update_idletasks()
-            width = self.output_text.winfo_width() + 25  
-            self.root.geometry(f"{width}x{self.root.winfo_height()}")  
-            self.root.update_idletasks()
+            self.output_text.pack(fill='x')
         else:
             self.output_text.pack_forget()
+
 
     def update_progress_bar(self, duration):
         progress = ttk.Progressbar(self.progress_frame, length=200, mode='determinate', maximum=duration, value=0)
@@ -102,10 +99,30 @@ class AudioDownloaderApp:
             messagebox.showinfo("Erfolg", "Download Abgeschlossen!")
             progress['value'] = progress['maximum']
 
-def main():
-    root = tk.Tk()
-    app = AudioDownloaderApp(root)
-    root.mainloop()
+@click.command()
+@click.argument("url", required=False)
+@click.option("--filename", "-f", default="myRadio", help="Name of recording")
+@click.option("--duration", "-d", default=30, help="Duration of recording in seconds")
+@click.option("--blocksize", "-b", default=64, help="Block size for read/write in bytes")
+@click.option("--list", "-l", is_flag=True, help="List all recordings")
+
+def main(url=None, filename="myRadio", duration=30, blocksize=64, list=False):
+    if not any([url, list]):
+        root = tk.Tk()
+        app = AudioDownloaderApp(root)
+        root.mainloop()
+    elif list:
+        list_of_recordings = list_recordings()
+        if list_of_recordings:
+            for recording in list_of_recordings:
+                click.echo(recording)
+        else:
+            click.echo("No recordings available.")
+    else:
+        try:
+            start_download(url, filename, duration, blocksize)
+        except ValueError as e:
+            click.echo(f"Error: {e}")
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-"""Dieses Modul stellt das backEnd für den gui_audiorecorder da."""
+"""Dieses Modul stellt das backend für den gui_audiorecorder da."""
 
 import datetime
 import sqlite3
